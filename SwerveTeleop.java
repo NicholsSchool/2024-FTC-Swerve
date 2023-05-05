@@ -1,5 +1,4 @@
-public class BasicOpMode_Iterative extends OpMode
-{
+public class SwerveTeleop extends OpMode {
 
     SwerveDriver sd = new SwerveDriver();
 
@@ -28,9 +27,9 @@ public class BasicOpMode_Iterative extends OpMode
     @Override
     public void loop() {
 
-        double x1 = (double) gamepad1.left_stick_x;
-        double y1 = (double) gamepad1.left_stick_y;
-        double x2 = (double) gamepad1.right_stick_x;
+        float x1 = gamepad1.left_stick_x;
+        float y1 = gamepad1.left_stick_y;
+        float x2 = gamepad1.right_stick_x;
 
         sd.move(x1, y1, x2);
     }

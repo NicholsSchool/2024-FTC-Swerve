@@ -1,11 +1,9 @@
-package org.firstinspires.ftc.robotcontroller.external.samples;
-
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
-public class SwerveDriver extends OpMode
-{
+public class SwerveDriver {
     Servo redServo;
 	Servo blueServo;
 	Servo greenServo;
@@ -18,11 +16,13 @@ public class SwerveDriver extends OpMode
     DcMotor yellowMotor;
     DcMotor[] motorList = new DcMotor[]{redMotor, blueMotor, greenMotor, yellowMotor};
 
+    HardwareMap hMap = new HardwareMap();
+
     public void init() {
-        redServo = hardwareMap.get(ServoImplEx.class, "redServo");
-        blueServo = hardwareMap.get(ServoImplEx.class, "blueServo");
-        greenServo = hardwareMap.get(ServoImplEx.class, "greenServo");
-        yellowServo = hardwareMap.get(ServoImplEx.class, "yellowServo");
+        redServo = hMap.
+        blueServo = hMap.get(Servo.class, "blueServo");
+        greenServo = hMap.get(Servo.class, "greenServo");
+        yellowServo = hMap.get(Servo.class, "yellowServo");
     }
 	
 	public void move(float strafeX, float strafeY, float rotate) {
