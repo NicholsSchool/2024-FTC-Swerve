@@ -33,6 +33,6 @@ public class SwerveDriver {
 	}
 
     private float thetatoEncoder(float theta){
-        float thetaInDegrees = (float) ((theta*180) / (2*Math.PI));
+        float thetaInDegrees = (float) ((theta*180) / (Math.PI));
     }
 }
