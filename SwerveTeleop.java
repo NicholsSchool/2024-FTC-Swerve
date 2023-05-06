@@ -1,4 +1,7 @@
-public class SwerveTeleop extends OpMode {
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.Gamepad;
+
+class SwerveTeleop extends OpMode {
 
     SwerveDriver sd = new SwerveDriver();
 
@@ -6,6 +9,7 @@ public class SwerveTeleop extends OpMode {
     public void init() {
         sd.init();
     }
+    
 
     /*
      * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY

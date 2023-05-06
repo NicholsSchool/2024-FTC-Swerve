@@ -1,0 +1,6 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\hamid\\Desktop\\classes\\RobotcoreSyntax\\RobotcoreSyntax.jar"
+    ]
+}
