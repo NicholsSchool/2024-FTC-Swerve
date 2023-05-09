@@ -3,11 +3,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class SwerveDriver {
-    Servo redServo;
-	Servo blueServo;
-	Servo greenServo;
-	Servo yellowServo;
-    Servo[] servoList = new Servo[]{redServo, blueServo, greenServo, yellowServo};
+    ServoImplEx redServo;
+	ServoImplEx blueServo;
+	ServoImplEx greenServo;
+	ServoImplEx yellowServo;
+    ServoImplEx[] servoList = new ServoImplEx[]{redServo, blueServo, greenServo, yellowServo};
     
 
     DcMotor redMotor;
@@ -19,10 +19,17 @@ public class SwerveDriver {
     HardwareMap hMap = new HardwareMap();
 
     public void init() {
-        redServo = hMap.get(Servo.class, "redServo");
-        blueServo = hMap.get(Servo.class, "blueServo");
-        greenServo = hMap.get(Servo.class, "greenServo");
-        yellowServo = hMap.get(Servo.class, "yellowServo");
+        redServo = hMap.get(ServoImplEx.class, "redServo");
+        blueServo = hMap.get(ServoImplEx.class, "blueServo");
+        greenServo = hMap.get(ServoImplEx.class, "greenServo");
+        yellowServo = hMap.get(ServoImplEx.class, "yellowServo");
+        for (ServoImplEx servo : servoList) {
+
+        }
+
+        for (DcMotor motor : motorList){
+            
+        }
     }
 	
 	public void move(float strafeX, float strafeY, float rotate) {
