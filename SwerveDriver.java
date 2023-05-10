@@ -1,6 +1,8 @@
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoImplEx;
+import com.qualcomm.robotcore.hardware.PwmControl;
 
 public class SwerveDriver {
     ServoImplEx redServo;
@@ -24,11 +26,12 @@ public class SwerveDriver {
         greenServo = hMap.get(ServoImplEx.class, "greenServo");
         yellowServo = hMap.get(ServoImplEx.class, "yellowServo");
         for (ServoImplEx servo : servoList) {
-
+            servo.setPwmRange(new PwmControl.PwmRange(505, 2495));
         }
 
         for (DcMotor motor : motorList){
-            
+            motor.setDirection(DcMotor.Direction.FORWARD);
+            motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
     }
 	
