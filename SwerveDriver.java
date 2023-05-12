@@ -15,17 +15,11 @@ public class SwerveDriver {
      * GRN--------YLW
      */
 
-    ServoImplEx redServo;
-	ServoImplEx blueServo;
-	ServoImplEx greenServo;
-	ServoImplEx yellowServo;
+    ServoImplEx redServo, blueServo, greenServo, yellowServo;
     ServoImplEx[] servoList = new ServoImplEx[]{redServo, blueServo, greenServo, yellowServo};
     
 
-    DcMotor redMotor;
-    DcMotor blueMotor;
-    DcMotor greenMotor;
-    DcMotor yellowMotor;
+    DcMotor redMotor, blueMotor, greenMotor, yellowMotor;
     DcMotor[] motorList = new DcMotor[]{redMotor, blueMotor, greenMotor, yellowMotor};
 
     public void init() {
@@ -81,7 +75,7 @@ public class SwerveDriver {
         float thetaInDegrees = (float) ((theta*180) / (Math.PI));
         //position of 1 means PWM of 2495 and 360-ish degree rotation
         //position of 0 means PWM of 505 and 0-ish degree rotation
-        float degreesToEncoderPos = thetaInDegrees/360;
+        float degreesToEncoderPos = (thetaInDegrees + 180) / 360; // map range formula (simplified)
         return degreesToEncoderPos;
     }
 }
