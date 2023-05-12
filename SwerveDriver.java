@@ -53,8 +53,8 @@ public class SwerveDriver {
 	public void move(float strafeX, float strafeY, float rotate) {
 
         //Calculations
-		float theta1 = (float) Math.atan2(strafeY + rotate, strafeX + rotate);
-        float theta2 = (float) Math.atan2(strafeY + rotate, strafeX - rotate);
+		float theta1 = (float) Math.atan2(strafeX + rotate, strafeY + rotate);
+        float theta2 = (float) Math.atan2(strafeX - rotate, strafeY + rotate);
         float power1 = (float) Math.sqrt(Math.pow((strafeY + rotate) / 2, 2) + Math.pow((strafeX + rotate) / 2, 2));
         float power2 = (float) Math.sqrt(Math.pow((strafeY + rotate) / 2, 2) + Math.pow((strafeX - rotate) / 2, 2));
 
