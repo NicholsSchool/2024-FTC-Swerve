@@ -1,8 +1,10 @@
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.hardware.PwmControl;
+import com.qualcomm.robotcore.hardware.IMU;
 
 public class SwerveDriver {
 
@@ -18,6 +20,7 @@ public class SwerveDriver {
     ServoImplEx redServo, blueServo, greenServo, yellowServo;
     ServoImplEx[] servoList = new ServoImplEx[]{redServo, blueServo, greenServo, yellowServo};
     
+    IMU.Parameters imuParams;
 
     DcMotor redMotor, blueMotor, greenMotor, yellowMotor;
     DcMotor[] motorList = new DcMotor[]{redMotor, blueMotor, greenMotor, yellowMotor};
@@ -25,6 +28,13 @@ public class SwerveDriver {
     public void init() {
 
         HardwareMap hMap = new HardwareMap();
+
+        imuParams = new IMU.Parameters(
+            new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+           )
+        );
 
         redServo = hMap.get(ServoImplEx.class, "redServo");
         blueServo = hMap.get(ServoImplEx.class, "blueServo");
