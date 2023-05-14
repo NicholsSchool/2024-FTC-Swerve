@@ -35,6 +35,9 @@ public class SwerveDriver {
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
            )
         );
+        // Create an object to receive the IMU angles
+        YawPitchRollAngles robotOrientation;
+        robotOrientation = imu.getRobotYawPitchRollAngles();
 
         redServo = hMap.get(ServoImplEx.class, "redServo");
         blueServo = hMap.get(ServoImplEx.class, "blueServo");
@@ -55,10 +58,14 @@ public class SwerveDriver {
     }
 	
 	public void move(float strafeX, float strafeY, float rotate) {
+    
+        double yaw   = robotOrientation.getYaw(AngleUnit.DEGREES);
+        double pitch = robotOrientation.getPitch(AngleUnit.DEGREES);
+        double roll  = robotOrientation.getRoll(AngleUnit.DEGREES);
 
         //Calculations
-		float theta1 = (float) Math.atan2(strafeX + rotate, strafeY + rotate);
-        float theta2 = (float) Math.atan2(strafeX - rotate, strafeY + rotate);
+		float theta1 = (float) Math.atan2(strafeX + rotate, strafeY + rotate) - (float)yaw;
+        float theta2 = (float) Math.atan2(strafeX - rotate, strafeY + rotate) - (float)yaw;
         float power1 = (float) Math.sqrt(Math.pow((strafeY + rotate) / 2, 2) + Math.pow((strafeX + rotate) / 2, 2));
         float power2 = (float) Math.sqrt(Math.pow((strafeY + rotate) / 2, 2) + Math.pow((strafeX - rotate) / 2, 2));
 
