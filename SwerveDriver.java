@@ -1,10 +1,12 @@
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.hardware.bosch.BNO055IMU.AngleUnit;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.HardwareDevice;
 
 public class SwerveDriver {
 
@@ -17,17 +19,20 @@ public class SwerveDriver {
      * GRN--------YLW
      */
 
-    ServoImplEx redServo, blueServo, greenServo, yellowServo;
-    ServoImplEx[] servoList = new ServoImplEx[]{redServo, blueServo, greenServo, yellowServo};
-    
-    IMU.Parameters imuParams;
+    private ServoImplEx redServo, blueServo, greenServo, yellowServo;
+    private ServoImplEx[] servoList = new ServoImplEx[]{redServo, blueServo, greenServo, yellowServo};
 
-    DcMotor redMotor, blueMotor, greenMotor, yellowMotor;
-    DcMotor[] motorList = new DcMotor[]{redMotor, blueMotor, greenMotor, yellowMotor};
+    private IMU.Parameters imuParams;
+    private IMU imu;
+
+    private DcMotor redMotor, blueMotor, greenMotor, yellowMotor;
+    private DcMotor[] motorList = new DcMotor[]{redMotor, blueMotor, greenMotor, yellowMotor};
 
     public void init() {
 
         HardwareMap hMap = new HardwareMap();
+
+        imu = hMap.get(IMU.class, "imu");
 
         imuParams = new IMU.Parameters(
             new RevHubOrientationOnRobot(
@@ -36,14 +41,8 @@ public class SwerveDriver {
            )
         );
 
-        public void resetIMU(){
-            imu.resetYaw();
-
-        }
-
-        // Create an object to receive the IMU angles
-        YawPitchRollAngles robotOrientation;
-        robotOrientation = imu.getRobotYawPitchRollAngles();
+        imu.initialize(imuParams);
+        imu.resetYaw();
 
         redServo = hMap.get(ServoImplEx.class, "redServo");
         blueServo = hMap.get(ServoImplEx.class, "blueServo");
@@ -63,15 +62,20 @@ public class SwerveDriver {
         }
     }
 	
+    public void resetYaw() {
+        imu.resetYaw();
+    }
+
 	public void move(float strafeX, float strafeY, float rotate) {
-    
-        double Yaw   = robotOrientation.getYaw(AngleUnit.DEGREES);
-        double Pitch = robotOrientation.getPitch(AngleUnit.DEGREES);
-        double Roll  = robotOrientation.getRoll(AngleUnit.DEGREES);
+
+        YawPitchRollAngles robotOrientation;
+        robotOrientation = imu.getRobotYawPitchRollAngles();
+        
+        double Yaw   = robotOrientation.getYaw(AngleUnit.RADIANS);
 
         //Calculations
-		float theta1 = (float) Math.atan2(strafeX + rotate, strafeY + rotate) - (float)Yaw;
-        float theta2 = (float) Math.atan2(strafeX - rotate, strafeY + rotate) - (float)Yaw;
+		float theta1 = (float) Math.atan2(strafeX + rotate, strafeY + rotate);
+        float theta2 = (float) Math.atan2(strafeX - rotate, strafeY + rotate);
         float power1 = (float) Math.sqrt(Math.pow((strafeY + rotate) / 2, 2) + Math.pow((strafeX + rotate) / 2, 2));
         float power2 = (float) Math.sqrt(Math.pow((strafeY + rotate) / 2, 2) + Math.pow((strafeX - rotate) / 2, 2));
 
@@ -98,7 +102,7 @@ public class SwerveDriver {
         float thetaInDegrees = (float) ((theta*180) / (Math.PI));
         //position of 1 means PWM of 2495 and 360-ish degree rotation
         //position of 0 means PWM of 505 and 0-ish degree rotation
-        float degreesToEncoderPos = (thetaInDegrees + 180) / 360; // map range formula (simplified)
-        return degreesToEncoderPos;
+        float degreesToServo = (thetaInDegrees + 180) / 360; // map range formula (simplified)
+        return degreesToServo;
     }
 }
