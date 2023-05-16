@@ -66,16 +66,35 @@ public class SwerveDriver {
         imu.resetYaw();
     }
 
+    public void moveWithEncoder(double degreeAngle, double distance){
+        //placeholder for later
+        double meterToEncoder = 500;
+
+        int position = ((int)degreeAngle + 180) / 360;
+        int encoderTick = (int)distance * (int)meterToEncoder;
+        
+        //setting powers and positions
+        for (DcMotor motor : motorList) {
+            motor.setTargetPosition(encoderTick);
+            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motor.setPower(1);
+        }
+        for (ServoImplEx servo : servoList) {
+           servo.setPosition(position);
+        }
+
+    }
+
 	public void move(float strafeX, float strafeY, float rotate) {
 
         YawPitchRollAngles robotOrientation;
         robotOrientation = imu.getRobotYawPitchRollAngles();
         
-        double Yaw   = robotOrientation.getYaw(AngleUnit.RADIANS);
+        float yaw = (float) (robotOrientation.getYaw(AngleUnit.RADIANS));
 
         //Calculations
-		float theta1 = (float) Math.atan2(strafeX + rotate, strafeY + rotate);
-        float theta2 = (float) Math.atan2(strafeX - rotate, strafeY + rotate);
+		float theta1 = (float) Math.atan2(strafeX + rotate, strafeY + rotate) - yaw;
+        float theta2 = (float) Math.atan2(strafeX - rotate, strafeY + rotate) - yaw;
         float power1 = (float) Math.sqrt(Math.pow((strafeY + rotate) / 2, 2) + Math.pow((strafeX + rotate) / 2, 2));
         float power2 = (float) Math.sqrt(Math.pow((strafeY + rotate) / 2, 2) + Math.pow((strafeX - rotate) / 2, 2));
 
