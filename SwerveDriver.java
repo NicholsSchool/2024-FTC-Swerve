@@ -1,11 +1,12 @@
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.hardware.bosch.BNO055IMU.AngleUnit;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.IMU;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 
 public class SwerveDriver {
@@ -20,17 +21,19 @@ public class SwerveDriver {
      */
 
     private ServoImplEx redServo, blueServo, greenServo, yellowServo;
-    private ServoImplEx[] servoList = new ServoImplEx[]{redServo, blueServo, greenServo, yellowServo};
+    private ServoImplEx[] servoList;
 
     private IMU.Parameters imuParams;
     private IMU imu;
 
     private DcMotor redMotor, blueMotor, greenMotor, yellowMotor;
-    private DcMotor[] motorList = new DcMotor[]{redMotor, blueMotor, greenMotor, yellowMotor};
+    private DcMotor[] motorList;
+    
+    double Yaw;
 
-    public void init() {
+    public void init( HardwareMap ahwMap ) {
 
-        HardwareMap hMap = new HardwareMap();
+        HardwareMap hMap = ahwMap; 
 
         imu = hMap.get(IMU.class, "imu");
 
@@ -48,7 +51,15 @@ public class SwerveDriver {
         blueServo = hMap.get(ServoImplEx.class, "blueServo");
         greenServo = hMap.get(ServoImplEx.class, "greenServo");
         yellowServo = hMap.get(ServoImplEx.class, "yellowServo");
+        
+        redMotor = hMap.get(DcMotor.class, "redMotor");
+        blueMotor = hMap.get(DcMotor.class, "blueMotor");
+        greenMotor = hMap.get(DcMotor.class, "greenMotor");
+        yellowMotor = hMap.get(DcMotor.class, "yellowMotor");
 
+        motorList = new DcMotor[]{redMotor, blueMotor, greenMotor, yellowMotor};
+        servoList = new ServoImplEx[]{redServo, blueServo, greenServo, yellowServo};
+        
         for (ServoImplEx servo : servoList) {
             servo.setPwmEnable();
             servo.setPwmRange(new PwmControl.PwmRange(505, 2495));
@@ -61,16 +72,16 @@ public class SwerveDriver {
             motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODERS);
         }
     }
-	
+    
     public void resetYaw() {
         imu.resetYaw();
     }
-
-    public void moveWithEncoder(double degreeAngle, double distance){
+    
+    public void moveWithEncoder(double angle, double distance){
         //placeholder for later
         double meterToEncoder = 500;
 
-        int position = ((int)degreeAngle + 180) / 360;
+        int position = ((int)angle + 180) / 360;
         int encoderTick = (int)distance * (int)meterToEncoder;
         
         //setting powers and positions
@@ -82,19 +93,21 @@ public class SwerveDriver {
         for (ServoImplEx servo : servoList) {
            servo.setPosition(position);
         }
+        
+        
 
     }
-
-	public void move(float strafeX, float strafeY, float rotate) {
+    
+    public void move(float strafeX, float strafeY, float rotate) {
 
         YawPitchRollAngles robotOrientation;
         robotOrientation = imu.getRobotYawPitchRollAngles();
         
-        float yaw = (float) (robotOrientation.getYaw(AngleUnit.RADIANS));
+        double Yaw = robotOrientation.getYaw(AngleUnit.RADIANS);
 
         //Calculations
-		float theta1 = (float) Math.atan2(strafeX + rotate, strafeY + rotate) - yaw;
-        float theta2 = (float) Math.atan2(strafeX - rotate, strafeY + rotate) - yaw;
+        float theta1 = (float) Math.atan2(strafeX + rotate, strafeY + rotate);
+        float theta2 = (float) Math.atan2(strafeX - rotate, strafeY + rotate);
         float power1 = (float) Math.sqrt(Math.pow((strafeY + rotate) / 2, 2) + Math.pow((strafeX + rotate) / 2, 2));
         float power2 = (float) Math.sqrt(Math.pow((strafeY + rotate) / 2, 2) + Math.pow((strafeX - rotate) / 2, 2));
 
@@ -115,7 +128,7 @@ public class SwerveDriver {
                 motor.setPower(power2);
             }
         }
-	}
+    }
 
     private float thetaToServo(float theta){
         float thetaInDegrees = (float) ((theta*180) / (Math.PI));
