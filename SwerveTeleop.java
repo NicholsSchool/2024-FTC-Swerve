@@ -3,7 +3,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 class SwerveTeleop extends OpMode {
 
-    SwerveDriver sd = new SwerveDriver();
+    SwerveDrive sd = new SwerveDrive();
 
     @Override
     public void init() {

@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.PwmControl;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 
-public class SwerveDriver {
+public class SwerveDrive {
 
     /* 
      * RED--------BLU
@@ -84,6 +84,14 @@ public class SwerveDriver {
         }
 
     }
+
+    /**
+     * Moves the Drivetrain with setPower()
+     *
+     * @strafeX Power for Left-Right Locomotion
+     * @strafeY Power for Forward-Back Locomotion
+     * @rotate The extent to which the drivetrain rotates
+     */
 
 	public void move(float strafeX, float strafeY, float rotate) {
 
