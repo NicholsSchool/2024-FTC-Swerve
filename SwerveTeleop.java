@@ -1,13 +1,15 @@
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-class SwerveTeleop extends OpMode {
+@TeleOp(name="RoboKartSwerve")
+public class SwerveTeleop extends OpMode {
 
     SwerveDrive sd = new SwerveDrive();
 
     @Override
     public void init() {
-        sd.init();
+        sd.init(hardwareMap);
     }
     
 
